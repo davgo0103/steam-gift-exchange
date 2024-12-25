@@ -20,6 +20,12 @@ const GiftExchangeApp = () => {
 
   // 在組件加載時從 localStorage 讀取數據
   useEffect(() => {
+    const storedUser = localStorage.getItem('currentUser');
+    if (storedUser) {
+      setCurrentUser(storedUser);
+      setIsAdmin(storedUser === 'shiwei');
+      setStep('plans'); // 如果有暱稱，直接跳到方案步驟
+    }
     const fetchUsers = async () => {
       try {
         const response = await fetch('http://localhost:3000/users');
@@ -46,8 +52,11 @@ const GiftExchangeApp = () => {
     setIsAdmin(currentUser === 'shiwei');
     setStep('plans');
     setError('');
+  
+    // 將暱稱保存到 localStorage
+    localStorage.setItem('currentUser', currentUser);
   };
-
+  
   const handlePlanSubmit = async () => {
     if (!planA.games[0] || !planA.games[1] || !planB.games[0] || !planB.games[1]) {
       setError('請填寫所有遊戲名稱');
