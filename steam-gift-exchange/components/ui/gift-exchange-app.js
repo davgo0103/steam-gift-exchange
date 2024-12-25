@@ -35,7 +35,7 @@ const GiftExchangeApp = () => {
         console.error('無法讀取使用者數據', error);
       }
     };
-  
+
     fetchUsers();
   }, []);
 
@@ -52,40 +52,40 @@ const GiftExchangeApp = () => {
     setIsAdmin(currentUser === 'shiwei');
     setStep('plans');
     setError('');
-  
+
     // 將暱稱保存到 localStorage
     localStorage.setItem('currentUser', currentUser);
   };
-  
+
   const handlePlanSubmit = async () => {
     if (!planA.games[0] || !planA.games[1] || !planB.games[0] || !planB.games[1]) {
       setError('請填寫所有遊戲名稱');
       return;
     }
-  
+
     if (!validatePrice(planA.price) || !validatePrice(planB.price)) {
       setError('價格必須在250-350之間');
       return;
     }
-  
+
     const newUser = {
       id: currentUser,
       planA,
       planB,
       timestamp: new Date().toISOString()
     };
-  
+
     try {
       const response = await fetch('http://localhost:3000/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newUser)
       });
-  
+
       if (!response.ok) {
         throw new Error('儲存數據失敗');
       }
-  
+
       // const updatedUsers = await response.json();
       setUsers(prev => [...prev.filter(user => user.id !== currentUser), newUser]);
       setError('');
@@ -95,28 +95,28 @@ const GiftExchangeApp = () => {
       setError('儲存數據失敗');
     }
   };
-  
+
 
   const performDraw = async () => {
     if (!isAdmin) return;
-    
+
     if (users.length < 2) {
       setError('至少需要兩位參與者才能進行抽籤');
       return;
     }
 
     setIsDrawing(true);
-    
+
     // 模擬抽獎動畫
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     const shuffledUsers = [...users].sort(() => Math.random() - 0.5);
     const results = shuffledUsers.map((user, index) => ({
       giver: user.id,
       receiver: shuffledUsers[(index + 1) % shuffledUsers.length].id,
       plan: Math.random() > 0.5 ? 'A' : 'B'
     }));
-    
+
     setDrawResult(results);
     setIsDrawing(false);
 
@@ -252,7 +252,7 @@ const GiftExchangeApp = () => {
                           onChange={(e) => {
                             const setter = plan === 'A' ? setPlanA : setPlanB;
                             const current = plan === 'A' ? planA : planB;
-                            setter({...current, games: [e.target.value, current.games[1]]});
+                            setter({ ...current, games: [e.target.value, current.games[1]] });
                           }}
                           className="border-2 focus:ring-2 focus:ring-purple-500"
                         />
@@ -262,7 +262,7 @@ const GiftExchangeApp = () => {
                           onChange={(e) => {
                             const setter = plan === 'A' ? setPlanA : setPlanB;
                             const current = plan === 'A' ? planA : planB;
-                            setter({...current, games: [current.games[0], e.target.value]});
+                            setter({ ...current, games: [current.games[0], e.target.value] });
                           }}
                           className="border-2 focus:ring-2 focus:ring-purple-500"
                         />
@@ -274,14 +274,12 @@ const GiftExchangeApp = () => {
                         onChange={(e) => {
                           const setter = plan === 'A' ? setPlanA : setPlanB;
                           const current = plan === 'A' ? planA : planB;
-                          setter({...current, price: e.target.value});
+                          setter({ ...current, price: e.target.value });
                         }}
                         className="border-2 focus:ring-2 focus:ring-purple-500"
                       />
                     </motion.div>
                   ))}
-
-                  <ParticipantsList />
 
                   <div className="space-y-4 pt-4">
                     <Button
@@ -300,6 +298,8 @@ const GiftExchangeApp = () => {
                       </Button>
                     )}
                   </div>
+                  <ParticipantsList />
+
                 </CardContent>
               </Card>
             </motion.div>
