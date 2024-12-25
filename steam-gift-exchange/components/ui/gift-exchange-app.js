@@ -110,7 +110,9 @@ const GiftExchangeApp = () => {
     // 模擬抽獎動畫
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    const shuffledUsers = [...users].sort(() => Math.random() - 0.5);
+    // 使用 Fisher-Yates Shuffle 打亂順序
+    const shuffledUsers = fisherYatesShuffle(users);
+
     const results = shuffledUsers.map((user, index) => ({
       giver: user.id,
       receiver: shuffledUsers[(index + 1) % shuffledUsers.length].id,
@@ -161,6 +163,16 @@ const GiftExchangeApp = () => {
       </div>
     </div>
   );
+
+  // Fisher-Yates Shuffle
+  const fisherYatesShuffle = (array) => {
+    const arr = [...array]; // 拷貝陣列，避免直接修改原陣列
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1)); // 隨機選取索引
+      [arr[i], arr[j]] = [arr[j], arr[i]]; // 交換元素
+    }
+    return arr;
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-8">
