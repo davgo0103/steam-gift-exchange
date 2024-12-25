@@ -104,7 +104,7 @@ const GiftExchangeApp = () => {
       setError('至少需要兩位參與者才能進行抽籤');
       return;
     }
-
+    setDrawResult(null);
     setIsDrawing(true);
 
     // 模擬抽獎動畫
@@ -329,7 +329,7 @@ const GiftExchangeApp = () => {
               <Card className="backdrop-blur-sm bg-white/90 shadow-xl">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-2xl text-green-600">
-                    <Lock className="h-8 w-8" />
+                    <Gift className="h-8 w-8" />
                     抽獎系統
                   </CardTitle>
                 </CardHeader>
