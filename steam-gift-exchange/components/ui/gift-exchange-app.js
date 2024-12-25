@@ -77,7 +77,7 @@ const GiftExchangeApp = () => {
         throw new Error('儲存數據失敗');
       }
   
-      const updatedUsers = await response.json();
+      // const updatedUsers = await response.json();
       setUsers(prev => [...prev.filter(user => user.id !== currentUser), newUser]);
       setError('');
       alert('方案提交成功！');
